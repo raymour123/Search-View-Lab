@@ -15,7 +15,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 
-public class ShoppingSQLiteOpenHelper extends SQLiteOpenHelper{
+public class ShoppingSQLiteOpenHelper extends SQLiteOpenHelper {
     private static final String TAG = ShoppingSQLiteOpenHelper.class.getCanonicalName();
 
     private static final int DATABASE_VERSION = 7;
@@ -29,7 +29,7 @@ public class ShoppingSQLiteOpenHelper extends SQLiteOpenHelper{
     public static final String COL_ITEM_TYPE = "TYPE";
 
 
-    public static final String[] SHOPPING_COLUMNS = {COL_ID,COL_ITEM_NAME,COL_ITEM_DESCRIPTION,COL_ITEM_PRICE,COL_ITEM_TYPE};
+    public static final String[] SHOPPING_COLUMNS = {COL_ID, COL_ITEM_NAME, COL_ITEM_DESCRIPTION, COL_ITEM_PRICE, COL_ITEM_TYPE};
 
     private static final String CREATE_SHOPPING_LIST_TABLE =
             "CREATE TABLE " + SHOPPING_LIST_TABLE_NAME +
@@ -56,5 +56,28 @@ public class ShoppingSQLiteOpenHelper extends SQLiteOpenHelper{
         this.onCreate(db);
     }
 
+    public Cursor showAllGroceries() {
+        SQLiteDatabase db = getReadableDatabase();
 
+        Cursor cursor = db.query(SHOPPING_LIST_TABLE_NAME,
+                new String[]{COL_ID, COL_ITEM_NAME},
+                null,
+                null,
+                null, null, null);
+
+        return cursor;
+    }
+
+    public Cursor searchGroceryNames(String query) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor cursor = db.query(SHOPPING_LIST_TABLE_NAME,
+                new String[]{COL_ID, COL_ITEM_NAME},
+                COL_ITEM_NAME + " LIKE + ?",
+                new String[]{"%" + query + "%"},
+                null, null, null);
+
+        return cursor;
+
+    }
 }
